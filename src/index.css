@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+:root {
+  /* Brand Colors */
+  --brand-red: #9E0000;
+  --brand-blue: #001852;
+
+  /* Accent Colors */
+  --accent-blue: #0F68B2;
+  --accent-green: #4EA62F;
+  --accent-maroon: #9E0000;
+  --accent-violet: #A12B92;
+  --accent-teal: #009189;
+  --accent-orange: #FF9B42;
+  --accent-brown: #984211;
+  --accent-dark-teal: #0C394E;
+  --accent-red: #BF1F1F;
+
+  /* Neutral Colors */
+  --neutral-black: #000000;
+  --neutral-white: #FFFFFF;
+  --neutral-warm-gray-02: #F5F5F5;
+  --neutral-warm-gray-04: #E5E5E5;
+  --neutral-warm-gray-800: #424242;
+  --neutral-warm-gray-900: #212121;
+
+  /* Pipeline Stage Colors */
+  --stage-research: #FF9B42;
+  --stage-hit-id: #FF9B42;
+  --stage-htl: #4EA62F;
+  --stage-lo: #009189;
+  --stage-llo: #0F68B2;
+  --stage-pre-clinical: #A12B92;
+  --stage-phase-1: #9E0000;
+  --stage-phase-2a: #BF1F1F;
+  --stage-phase-2b: #984211;
+  --stage-phase-3: #0C394E;
+
+  /* Category Badge Colors */
+  --badge-oncology: #9E0000;
+  --badge-into: #4EA62F;
+  --badge-immunology: #009189;
+  --badge-neuroscience: #A12B92;
+  --badge-cardiopulmonary: #0F68B2;
+  --badge-other: #FF9B42;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--neutral-white);
+  color: var(--neutral-black);
+}
+
+* {
+  box-sizing: border-box;
+}

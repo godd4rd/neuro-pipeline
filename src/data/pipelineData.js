@@ -1,0 +1,167 @@
+// Pipeline stage colors
+export const STAGE_COLORS = {
+  'Pre-portfolio': '#FF9B42',
+  'HIT ID': '#FF9B42',
+  'HTL': '#4EA62F',
+  'LO': '#009189',
+  'LLO': '#0F68B2',
+  'Pre-clinical': '#A12B92',
+  'Phase 1': '#9E0000',
+  'Phase 2a': '#BF1F1F',
+  'Phase 2b': '#984211',
+  'Phase 3': '#0C394E',
+};
+
+// Category badge colors
+export const CATEGORY_COLORS = {
+  oncology: '#9E0000',
+  into: '#4EA62F',
+  immunology: '#009189',
+  neuroscience: '#A12B92',
+  cardiopulmonary: '#0F68B2',
+  other: '#FF9B42',
+};
+
+// Stage labels for x-axis
+export const STAGES = [
+  'HIT ID',
+  'HTL',
+  'LO',
+  'LLO',
+  'Pre-clinical',
+  'Phase 1',
+  'Phase 2a',
+  'Phase 2b',
+  'Phase 3',
+];
+
+// Mock data for each programme category
+export const programmeData = {
+  all: {
+    title: 'All programmes',
+    internalCount: 225,
+    externalCount: 225,
+    data: [
+      { stage: 'HIT ID', internal: 2, external: 3 },
+      { stage: 'HTL', internal: 3, external: 2 },
+      { stage: 'LO', internal: 4, external: 3 },
+      { stage: 'LLO', internal: 3, external: 4 },
+      { stage: 'Pre-clinical', internal: 5, external: 4 },
+      { stage: 'Phase 1', internal: 4, external: 5 },
+      { stage: 'Phase 2a', internal: 3, external: 4 },
+      { stage: 'Phase 2b', internal: 4, external: 3 },
+      { stage: 'Phase 3', internal: 3, external: 4 },
+    ],
+  },
+  oncology: {
+    title: 'Oncology programmes',
+    category: 'oncology',
+    internalCount: 100,
+    externalCount: 100,
+    total: 100,
+    data: [
+      { stage: 'HIT ID', internal: 1, external: 2 },
+      { stage: 'HTL', internal: 2, external: 1 },
+      { stage: 'LO', internal: 3, external: 2 },
+      { stage: 'LLO', internal: 2, external: 3 },
+      { stage: 'Pre-clinical', internal: 4, external: 3 },
+      { stage: 'Phase 1', internal: 3, external: 4 },
+      { stage: 'Phase 2a', internal: 2, external: 3 },
+      { stage: 'Phase 2b', internal: 3, external: 2 },
+      { stage: 'Phase 3', internal: 2, external: 3 },
+    ],
+  },
+  into: {
+    title: 'INTO programmes',
+    category: 'into',
+    internalCount: 0,
+    externalCount: 56,
+    total: 56,
+    data: [
+      { stage: 'HIT ID', internal: 0, external: 1 },
+      { stage: 'HTL', internal: 0, external: 1 },
+      { stage: 'LO', internal: 0, external: 2 },
+      { stage: 'LLO', internal: 0, external: 2 },
+      { stage: 'Pre-clinical', internal: 0, external: 3 },
+      { stage: 'Phase 1', internal: 0, external: 4 },
+      { stage: 'Phase 2a', internal: 0, external: 5 },
+      { stage: 'Phase 2b', internal: 0, external: 6 },
+      { stage: 'Phase 3', internal: 0, external: 8 },
+    ],
+  },
+  immunology: {
+    title: 'Immunology programmes',
+    category: 'immunology',
+    internalCount: 1,
+    externalCount: 52,
+    total: 53,
+    data: [
+      { stage: 'HIT ID', internal: 0, external: 1 },
+      { stage: 'HTL', internal: 0, external: 2 },
+      { stage: 'LO', internal: 0, external: 2 },
+      { stage: 'LLO', internal: 0, external: 3 },
+      { stage: 'Pre-clinical', internal: 1, external: 4 },
+      { stage: 'Phase 1', internal: 0, external: 5 },
+      { stage: 'Phase 2a', internal: 0, external: 4 },
+      { stage: 'Phase 2b', internal: 0, external: 3 },
+      { stage: 'Phase 3', internal: 0, external: 2 },
+    ],
+  },
+  neuroscience: {
+    title: 'Neuroscience programmes',
+    category: 'neuroscience',
+    internalCount: 0,
+    externalCount: 40,
+    total: 40,
+    data: [
+      { stage: 'HIT ID', internal: 0, external: 1 },
+      { stage: 'HTL', internal: 0, external: 1 },
+      { stage: 'LO', internal: 0, external: 2 },
+      { stage: 'LLO', internal: 0, external: 3 },
+      { stage: 'Pre-clinical', internal: 0, external: 4 },
+      { stage: 'Phase 1', internal: 0, external: 5 },
+      { stage: 'Phase 2a', internal: 0, external: 6 },
+      { stage: 'Phase 2b', internal: 0, external: 7 },
+      { stage: 'Phase 3', internal: 0, external: 8 },
+    ],
+  },
+  cardiopulmonary: {
+    title: 'Cardiopulmonary',
+    category: 'cardiopulmonary',
+    internalCount: 0,
+    externalCount: 5,
+    total: 5,
+    data: [
+      { stage: 'HIT ID', internal: 0, external: 0 },
+      { stage: 'HTL', internal: 0, external: 0 },
+      { stage: 'LO', internal: 0, external: 0 },
+      { stage: 'LLO', internal: 0, external: 1 },
+      { stage: 'Pre-clinical', internal: 0, external: 1 },
+      { stage: 'Phase 1', internal: 0, external: 1 },
+      { stage: 'Phase 2a', internal: 0, external: 1 },
+      { stage: 'Phase 2b', internal: 0, external: 1 },
+      { stage: 'Phase 3', internal: 0, external: 0 },
+    ],
+  },
+  other: {
+    title: 'Other programmes',
+    category: 'other',
+    internalCount: 0,
+    externalCount: 17,
+    total: 17,
+    data: [
+      { stage: 'HIT ID', internal: 0, external: 1 },
+      { stage: 'HTL', internal: 0, external: 1 },
+      { stage: 'LO', internal: 0, external: 1 },
+      { stage: 'LLO', internal: 0, external: 2 },
+      { stage: 'Pre-clinical', internal: 0, external: 3 },
+      { stage: 'Phase 1', internal: 0, external: 4 },
+      { stage: 'Phase 2a', internal: 0, external: 5 },
+      { stage: 'Phase 2b', internal: 0, external: 6 },
+      { stage: 'Phase 3', internal: 0, external: 8 },
+    ],
+  },
+};
+
+// Pipeline value
+export const PIPELINE_VALUE = '$67.7m';
