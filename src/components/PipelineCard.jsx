@@ -1,6 +1,6 @@
 import { THERAPY_AREA_COLORS } from '../data/neuroscienceData';
 
-export default function PipelineCard({ card, showValue = true }) {
+export default function PipelineCard({ card, showValue = true, onClick }) {
   if (!card) {
     return <div className="min-h-[100px]" />;
   }
@@ -10,8 +10,11 @@ export default function PipelineCard({ card, showValue = true }) {
 
   return (
     <div
-      className="bg-white border border-gray-300 rounded-lg p-2 min-h-[100px] flex flex-col gap-1"
+      className={`bg-white border border-gray-300 rounded-lg p-2 min-h-[100px] flex flex-col gap-1 ${
+        onClick ? 'cursor-pointer hover:shadow-md hover:border-gray-400 transition-all' : ''
+      }`}
       style={{ borderLeftWidth: '4px', borderLeftColor: borderColor }}
+      onClick={onClick}
     >
       <span className="inline-block self-start px-2 py-0.5 border border-gray-300 rounded text-[11px] font-medium bg-white">
         {drugName}

@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import PipelineGrid from '../components/PipelineGrid';
+import ProgrammeDetailOverlay from '../components/ProgrammeDetailOverlay';
 import { neurosciencePipelineData } from '../data/neuroscienceData';
 
 export default function NeurosciencePipeline() {
   const [year, setYear] = useState(2025);
   const [showValue, setShowValue] = useState(true);
+  const [selectedProgramme, setSelectedProgramme] = useState(null);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -124,7 +126,19 @@ export default function NeurosciencePipeline() {
       </section>
 
       {/* Pipeline Grid */}
-      <PipelineGrid data={neurosciencePipelineData} showValue={showValue} />
+      <PipelineGrid
+        data={neurosciencePipelineData}
+        showValue={showValue}
+        onCardClick={setSelectedProgramme}
+      />
+
+      {/* Programme Detail Overlay */}
+      {selectedProgramme && (
+        <ProgrammeDetailOverlay
+          programme={selectedProgramme}
+          onClose={() => setSelectedProgramme(null)}
+        />
+      )}
     </div>
   );
 }
