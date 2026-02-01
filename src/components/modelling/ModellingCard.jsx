@@ -18,7 +18,7 @@ export default function ModellingCard({ card, showValue = true, isSelected, onSe
   return (
     <div
       onClick={onSelect}
-      className={`relative bg-white rounded-lg p-3 shadow-sm cursor-pointer transition-all ${getCardClasses()}`}
+      className={`relative bg-white rounded-lg p-3 shadow-sm cursor-pointer transition-all min-h-[100px] ${getCardClasses()}`}
       style={{ borderLeftWidth: '4px', borderLeftColor: borderColor, borderLeftStyle: 'solid' }}
     >
       {/* Selection Checkbox */}

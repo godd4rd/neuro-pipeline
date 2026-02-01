@@ -159,7 +159,7 @@ export default function ModellingGrid({
 // Placeholder for gaps to reach ideal capacity
 function GapPlaceholder() {
   return (
-    <div className="border-2 border-dashed border-[#D21034] rounded-lg p-3 min-h-[80px] flex items-center justify-center cursor-pointer hover:bg-red-50 transition-colors">
+    <div className="border-2 border-dashed border-[#D21034] rounded-lg p-3 min-h-[100px] flex items-center justify-center cursor-pointer hover:bg-red-50 transition-colors">
       <svg
         className="w-5 h-5 text-[#D21034]"
         viewBox="0 0 24 24"
@@ -177,7 +177,7 @@ function GapPlaceholder() {
 // Button to add more programmes beyond ideal capacity
 function AddMoreButton() {
   return (
-    <div className="border-2 border-dashed border-gray-300 rounded-lg p-3 min-h-[80px] flex items-center justify-center cursor-pointer hover:border-gray-400 hover:bg-gray-50 transition-colors">
+    <div className="border-2 border-dashed border-gray-300 rounded-lg p-3 min-h-[100px] flex items-center justify-center cursor-pointer hover:border-gray-400 hover:bg-gray-50 transition-colors">
       <svg
         className="w-5 h-5 text-gray-400"
         viewBox="0 0 24 24"
