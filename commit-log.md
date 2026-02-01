@@ -17,3 +17,4 @@ A quick reference for finding and reverting changes.
 | `8477366` | Set consistent min-height (100px) on cards and placeholders for aligned grid |
 | `0b4fc32` | Remove ProgrammeSearch sidebar from Portfolio Modelling page |
 | `d9d63e5` | Add Find Programme page - navigate from placeholders with stage filter |
+| `470ac31` | Add floating action panel when programmes are selected (Compare, Add to model, Reset) |
