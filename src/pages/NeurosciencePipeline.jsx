@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import PipelineGrid from '../components/PipelineGrid';
 import ProgrammeDetailOverlay from '../components/ProgrammeDetailOverlay';
+import PlaygroundDropdown from '../components/PlaygroundDropdown';
 import { neurosciencePipelineData } from '../data/neuroscienceData';
 
 export default function NeurosciencePipeline() {
@@ -42,9 +43,12 @@ export default function NeurosciencePipeline() {
             Count of programmes by stage (columns). This view is read-only.
           </p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-[#D21034] text-white rounded-lg text-sm font-medium hover:bg-[#B80D2C] transition-colors">
-          Pipeline playground
-        </button>
+        <PlaygroundDropdown
+          onSelect={(action) => {
+            console.log('Selected action:', action);
+            // TODO: Implement action handlers
+          }}
+        />
       </section>
 
       {/* Controls Section */}
