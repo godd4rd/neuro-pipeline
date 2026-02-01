@@ -1,8 +1,7 @@
 export default function DraftCard({ programme, onRemove }) {
   return (
     <div
-      className="relative bg-white rounded-lg p-3 shadow-sm min-h-[100px] border border-gray-200"
-      style={{ borderLeftWidth: '4px', borderLeftColor: '#0F68B2', borderLeftStyle: 'solid' }}
+      className="relative bg-white rounded-lg p-3 min-h-[100px] border-2 border-dashed border-gray-900"
     >
       {/* Remove button */}
       {onRemove && (

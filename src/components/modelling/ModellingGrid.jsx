@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import ModellingCard from './ModellingCard';
-import DraftCard from './DraftCard';
 import { useModelling } from '../../context/ModellingContext';
 
 // Portfolio thresholds per stage
@@ -55,14 +54,12 @@ export default function ModellingGrid({
       .filter(Boolean);
 
     // Draft cards added from Find Programme
-    const draftCards = getDraftProgrammesForStage(stage).map((p) => ({
-      ...p,
-      isDraft: true,
-    }));
+    const draftCards = getDraftProgrammesForStage(stage);
 
-    const allCards = [...existingCards, ...draftCards];
     const thresholds = STAGE_THRESHOLDS[stage] || { minimum: 2, ideal: 5 };
-    const totalCount = allCards.length;
+    // Draft programmes fill one placeholder slot (regardless of how many)
+    const hasDrafts = draftCards.length > 0;
+    const totalCount = existingCards.length + (hasDrafts ? 1 : 0);
 
     // Calculate how many placeholders needed for minimum and ideal
     const belowMinimum = Math.max(0, thresholds.minimum - totalCount);
@@ -72,7 +69,7 @@ export default function ModellingGrid({
       stage,
       existingCards,
       draftCards,
-      allCards,
+      hasDrafts,
       minimum: thresholds.minimum,
       ideal: thresholds.ideal,
       totalCount,
@@ -134,36 +131,34 @@ export default function ModellingGrid({
         {/* Grid rows - iterate by row index */}
         {Array.from({ length: maxRows }).map((_, rowIndex) =>
           columnData.map((col, colIndex) => {
-            const { stage, allCards, belowMinimum, betweenMinAndIdeal, totalCount } = col;
+            const { stage, existingCards, draftCards, hasDrafts, belowMinimum, betweenMinAndIdeal, totalCount } = col;
 
             // Determine what to show in this cell
-            if (rowIndex < allCards.length) {
-              const card = allCards[rowIndex];
-
-              if (card.isDraft) {
-                // Show draft card (blue border, company/DAS display)
-                return (
-                  <div key={`${rowIndex}-${colIndex}`}>
-                    <DraftCard
-                      programme={card}
-                      onRemove={() => removeProgrammeFromStage(stage, card.id)}
-                    />
-                  </div>
-                );
-              } else {
-                // Show existing card
-                const isSelected = selectedProgrammes.has(card.id);
-                return (
-                  <div key={`${rowIndex}-${colIndex}`}>
-                    <ModellingCard
-                      card={card}
-                      showValue={showValue}
-                      isSelected={isSelected}
-                      onSelect={() => onProgrammeSelect(card.id)}
-                    />
-                  </div>
-                );
-              }
+            if (rowIndex < existingCards.length) {
+              // Show existing card
+              const card = existingCards[rowIndex];
+              const isSelected = selectedProgrammes.has(card.id);
+              return (
+                <div key={`${rowIndex}-${colIndex}`}>
+                  <ModellingCard
+                    card={card}
+                    showValue={showValue}
+                    isSelected={isSelected}
+                    onSelect={() => onProgrammeSelect(card.id)}
+                  />
+                </div>
+              );
+            } else if (hasDrafts && rowIndex === existingCards.length) {
+              // Show all draft programmes grouped in one dashed container
+              return (
+                <div key={`${rowIndex}-${colIndex}`}>
+                  <DraftPlaceholder
+                    programmes={draftCards}
+                    stage={stage}
+                    onRemove={(id) => removeProgrammeFromStage(stage, id)}
+                  />
+                </div>
+              );
             } else if (rowIndex < totalCount + belowMinimum + betweenMinAndIdeal) {
               // Show gap placeholder (red dashed) - navigates to find programme
               return (
@@ -227,6 +222,30 @@ function AddMoreButton({ onClick }) {
         <circle cx="12" cy="12" r="10" />
         <path d="M12 8v8M8 12h8" />
       </svg>
+    </div>
+  );
+}
+
+// Container for draft programmes - groups multiple programmes in one dashed placeholder
+function DraftPlaceholder({ programmes, stage, onRemove }) {
+  return (
+    <div className="border-2 border-dashed border-gray-900 rounded-lg p-2 min-h-[100px] bg-white">
+      <div className="space-y-2">
+        {programmes.map((prog) => (
+          <div key={prog.id} className="relative bg-gray-50 rounded p-2">
+            <button
+              onClick={() => onRemove(prog.id)}
+              className="absolute top-1 right-1 w-4 h-4 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+            <p className="text-xs font-medium text-gray-900 pr-5">{prog.company}</p>
+            <p className="text-[10px] text-gray-500">{prog.das}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
