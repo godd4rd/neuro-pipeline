@@ -20,3 +20,4 @@ A quick reference for finding and reverting changes.
 | `470ac31` | Add floating action panel when programmes are selected (Compare, Add to model, Reset) |
 | `a29f608` | Add React Context to persist draft programmes - blue border cards show company/DAS |
 | `bea2599` | Group draft programmes in single black dashed placeholder container |
+| `632f533` | Switch to independent flex columns to prevent row misalignment |
