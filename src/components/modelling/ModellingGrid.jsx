@@ -81,19 +81,31 @@ export default function ModellingGrid({
       >
         {/* Stage Headers with counts */}
         {columnData.map(({ stage, currentCount, minimum, ideal }) => {
-          const bgColor = STAGE_COLOR_MAP[stage] || '#6B7280';
-          const isBelowMinimum = currentCount < minimum;
+          const defaultColor = STAGE_COLOR_MAP[stage] || '#6B7280';
+
+          // Determine header color based on threshold status
+          let headerColor = defaultColor;
+          let statusClass = '';
+
+          if (currentCount < minimum) {
+            // Critical: below minimum threshold - RED
+            headerColor = '#DC2626'; // red-600
+            statusClass = 'ring-2 ring-red-300 ring-offset-1';
+          } else if (currentCount < ideal) {
+            // Warning: between minimum and ideal - AMBER
+            headerColor = '#D97706'; // amber-600
+          }
+          // else: at or above ideal - use default stage color
+
           return (
             <div
               key={stage}
-              className={`text-white px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-between ${
-                isBelowMinimum ? 'ring-2 ring-red-500 ring-offset-1' : ''
-              }`}
-              style={{ backgroundColor: bgColor }}
+              className={`text-white px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-between transition-colors ${statusClass}`}
+              style={{ backgroundColor: headerColor }}
             >
               <span className="whitespace-nowrap">{stage}</span>
-              <span className={`text-[10px] ${isBelowMinimum ? 'text-red-200 font-bold' : 'opacity-80'}`}>
-                {currentCount}/{minimum}/{ideal}
+              <span className="opacity-90 text-[10px]">
+                {currentCount}/{ideal}
               </span>
             </div>
           );
@@ -119,18 +131,11 @@ export default function ModellingGrid({
                   />
                 </div>
               );
-            } else if (rowIndex < currentCount + belowMinimum) {
-              // Show CRITICAL placeholder (below minimum - red)
-              return (
-                <div key={`${rowIndex}-${colIndex}`}>
-                  <CriticalGapPlaceholder />
-                </div>
-              );
             } else if (rowIndex < currentCount + belowMinimum + betweenMinAndIdeal) {
-              // Show OPTIONAL placeholder (between min and ideal - orange/amber)
+              // Show gap placeholder (red dashed)
               return (
                 <div key={`${rowIndex}-${colIndex}`}>
-                  <OptionalGapPlaceholder />
+                  <GapPlaceholder />
                 </div>
               );
             } else if (rowIndex === currentCount + belowMinimum + betweenMinAndIdeal) {
@@ -151,30 +156,12 @@ export default function ModellingGrid({
   );
 }
 
-// CRITICAL: Placeholder for gaps below minimum threshold (must fill)
-function CriticalGapPlaceholder() {
+// Placeholder for gaps to reach ideal capacity
+function GapPlaceholder() {
   return (
-    <div className="border-2 border-dashed border-[#D21034] bg-red-50 rounded-lg p-3 min-h-[80px] flex items-center justify-center cursor-pointer hover:bg-red-100 transition-colors">
+    <div className="border-2 border-dashed border-[#D21034] rounded-lg p-3 min-h-[80px] flex items-center justify-center cursor-pointer hover:bg-red-50 transition-colors">
       <svg
         className="w-5 h-5 text-[#D21034]"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-      >
-        <circle cx="12" cy="12" r="10" />
-        <path d="M12 8v8M8 12h8" />
-      </svg>
-    </div>
-  );
-}
-
-// OPTIONAL: Placeholder for gaps between minimum and ideal (nice to have)
-function OptionalGapPlaceholder() {
-  return (
-    <div className="border-2 border-dashed border-amber-400 bg-amber-50 rounded-lg p-3 min-h-[80px] flex items-center justify-center cursor-pointer hover:bg-amber-100 transition-colors">
-      <svg
-        className="w-5 h-5 text-amber-500"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
