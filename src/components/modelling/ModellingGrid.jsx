@@ -78,11 +78,6 @@ export default function ModellingGrid({
     };
   });
 
-  // Find the maximum number of rows needed (cards + all placeholders + add button)
-  const maxRows = Math.max(
-    ...columnData.map((col) => col.totalCount + col.belowMinimum + col.betweenMinAndIdeal + 1)
-  );
-
   const handlePlaceholderClick = (stage) => {
     navigate(`/find-programme?stage=${encodeURIComponent(stage)}`);
   };
@@ -90,14 +85,12 @@ export default function ModellingGrid({
   return (
     <section className="px-6 py-4 overflow-x-auto">
       <div
-        className="grid gap-2"
-        style={{
-          gridTemplateColumns: `repeat(${stages.length}, minmax(130px, 1fr))`,
-          minWidth: '1300px',
-        }}
+        className="flex gap-2"
+        style={{ minWidth: '1300px' }}
       >
-        {/* Stage Headers with counts */}
-        {columnData.map(({ stage, totalCount, minimum, ideal }) => {
+        {/* Each column is independent - items stack vertically without affecting other columns */}
+        {columnData.map((col) => {
+          const { stage, existingCards, draftCards, hasDrafts, belowMinimum, betweenMinAndIdeal, totalCount, minimum, ideal } = col;
           const defaultColor = STAGE_COLOR_MAP[stage] || '#6B7280';
 
           // Determine header color based on threshold status
@@ -105,80 +98,58 @@ export default function ModellingGrid({
           let statusClass = '';
 
           if (totalCount < minimum) {
-            // Critical: below minimum threshold - RED
-            headerColor = '#DC2626'; // red-600
+            headerColor = '#DC2626';
             statusClass = 'ring-2 ring-red-300 ring-offset-1';
           } else if (totalCount < ideal) {
-            // Warning: between minimum and ideal - AMBER
-            headerColor = '#D97706'; // amber-600
+            headerColor = '#D97706';
           }
-          // else: at or above ideal - use default stage color
 
           return (
-            <div
-              key={stage}
-              className={`text-white px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-between transition-colors ${statusClass}`}
-              style={{ backgroundColor: headerColor }}
-            >
-              <span className="whitespace-nowrap">{stage}</span>
-              <span className="opacity-90 text-[10px]">
-                {totalCount}/{ideal}
-              </span>
-            </div>
-          );
-        })}
+            <div key={stage} className="flex-1 flex flex-col gap-2" style={{ minWidth: '130px' }}>
+              {/* Stage Header */}
+              <div
+                className={`text-white px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-between transition-colors ${statusClass}`}
+                style={{ backgroundColor: headerColor }}
+              >
+                <span className="whitespace-nowrap">{stage}</span>
+                <span className="opacity-90 text-[10px]">
+                  {totalCount}/{ideal}
+                </span>
+              </div>
 
-        {/* Grid rows - iterate by row index */}
-        {Array.from({ length: maxRows }).map((_, rowIndex) =>
-          columnData.map((col, colIndex) => {
-            const { stage, existingCards, draftCards, hasDrafts, belowMinimum, betweenMinAndIdeal, totalCount } = col;
-
-            // Determine what to show in this cell
-            if (rowIndex < existingCards.length) {
-              // Show existing card
-              const card = existingCards[rowIndex];
-              const isSelected = selectedProgrammes.has(card.id);
-              return (
-                <div key={`${rowIndex}-${colIndex}`}>
+              {/* Existing cards */}
+              {existingCards.map((card) => {
+                const isSelected = selectedProgrammes.has(card.id);
+                return (
                   <ModellingCard
+                    key={card.id}
                     card={card}
                     showValue={showValue}
                     isSelected={isSelected}
                     onSelect={() => onProgrammeSelect(card.id)}
                   />
-                </div>
-              );
-            } else if (hasDrafts && rowIndex === existingCards.length) {
-              // Show all draft programmes grouped in one dashed container
-              return (
-                <div key={`${rowIndex}-${colIndex}`}>
-                  <DraftPlaceholder
-                    programmes={draftCards}
-                    stage={stage}
-                    onRemove={(id) => removeProgrammeFromStage(stage, id)}
-                  />
-                </div>
-              );
-            } else if (rowIndex < totalCount + belowMinimum + betweenMinAndIdeal) {
-              // Show gap placeholder (red dashed) - navigates to find programme
-              return (
-                <div key={`${rowIndex}-${colIndex}`}>
-                  <GapPlaceholder onClick={() => handlePlaceholderClick(stage)} />
-                </div>
-              );
-            } else if (rowIndex === totalCount + belowMinimum + betweenMinAndIdeal) {
-              // Show "add more" button - also navigates to find programme
-              return (
-                <div key={`${rowIndex}-${colIndex}`}>
-                  <AddMoreButton onClick={() => handlePlaceholderClick(stage)} />
-                </div>
-              );
-            } else {
-              // Empty cell
-              return <div key={`${rowIndex}-${colIndex}`} />;
-            }
-          })
-        )}
+                );
+              })}
+
+              {/* Draft programmes grouped in one container */}
+              {hasDrafts && (
+                <DraftPlaceholder
+                  programmes={draftCards}
+                  stage={stage}
+                  onRemove={(id) => removeProgrammeFromStage(stage, id)}
+                />
+              )}
+
+              {/* Gap placeholders (red dashed) */}
+              {Array.from({ length: belowMinimum + betweenMinAndIdeal }).map((_, i) => (
+                <GapPlaceholder key={`gap-${i}`} onClick={() => handlePlaceholderClick(stage)} />
+              ))}
+
+              {/* Add more button */}
+              <AddMoreButton onClick={() => handlePlaceholderClick(stage)} />
+            </div>
+          );
+        })}
       </div>
     </section>
   );
