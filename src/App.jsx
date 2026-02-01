@@ -8,7 +8,7 @@ import FindProgramme from './pages/FindProgramme';
 function App() {
   return (
     <ModellingProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/neuro-pipeline">
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/neuroscience" element={<NeurosciencePipeline />} />
