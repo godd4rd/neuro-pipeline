@@ -8,4 +8,5 @@ A quick reference for finding and reverting changes.
 | `81dfacb` | Add CLAUDE.md with design system, coding conventions, and project context |
 | `b936cba` | Add commit-log.md for tracking changes |
 | `6c5de31` | Add programme detail overlay - clickable cards show modal with drug details |
-| `_______` | Add Pipeline playground dropdown menu with three action options |
+| `50c065d` | Add Pipeline playground dropdown menu with three action options |
+| `9bc250e` | Add Portfolio Modelling Wizard page with selectable cards and search panel |
