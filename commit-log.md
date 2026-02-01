@@ -15,3 +15,4 @@ A quick reference for finding and reverting changes.
 | `4774ae5` | Add minimum and ideal thresholds - red (critical), amber (optional), gray (add more) |
 | `4f67af0` | Color headers instead of placeholders - red/amber header based on threshold status |
 | `8477366` | Set consistent min-height (100px) on cards and placeholders for aligned grid |
+| `0b4fc32` | Remove ProgrammeSearch sidebar from Portfolio Modelling page |
