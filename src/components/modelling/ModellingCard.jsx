@@ -1,19 +1,25 @@
 import { THERAPY_AREA_COLORS } from '../../data/neuroscienceData';
 
-export default function ModellingCard({ card, showValue = true, isSelected, onSelect }) {
+export default function ModellingCard({ card, showValue = true, isSelected, onSelect, isDraft = false }) {
   if (!card) return null;
 
   const borderColor = THERAPY_AREA_COLORS[card.color] || '#9CA3AF';
 
+  // Determine card style based on selection/draft state
+  const getCardClasses = () => {
+    if (isSelected) {
+      // Selected state: dashed red border with red background tint
+      return 'border-2 border-dashed border-[#D21034] bg-red-50';
+    }
+    // Default state: solid border
+    return 'border border-gray-200 hover:shadow-md';
+  };
+
   return (
     <div
       onClick={onSelect}
-      className={`relative bg-white rounded-lg p-3 shadow-sm cursor-pointer transition-all ${
-        isSelected
-          ? 'ring-2 ring-[#D21034] border-2 border-[#D21034]'
-          : 'border border-gray-200 hover:shadow-md'
-      }`}
-      style={{ borderLeftWidth: '4px', borderLeftColor: borderColor }}
+      className={`relative bg-white rounded-lg p-3 shadow-sm cursor-pointer transition-all ${getCardClasses()}`}
+      style={{ borderLeftWidth: '4px', borderLeftColor: borderColor, borderLeftStyle: 'solid' }}
     >
       {/* Selection Checkbox */}
       <div
