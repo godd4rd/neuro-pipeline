@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import ModellingCard from './ModellingCard';
+import DraftCard from './DraftCard';
+import { useModelling } from '../../context/ModellingContext';
 
 // Portfolio thresholds per stage
 const STAGE_THRESHOLDS = {
@@ -37,32 +39,43 @@ export default function ModellingGrid({
   onProgrammeSelect,
 }) {
   const navigate = useNavigate();
+  const { getDraftProgrammesForStage, removeProgrammeFromStage } = useModelling();
 
   // Reorganize data by columns (stages) instead of rows
   const columnData = stages.map((stage, colIndex) => {
-    const cards = data
+    // Existing cards from the data
+    const existingCards = data
       .map((row, rowIndex) => {
         const card = row[colIndex];
         if (card) {
-          return { ...card, id: card.id || `prog-${rowIndex}-${colIndex}` };
+          return { ...card, id: card.id || `prog-${rowIndex}-${colIndex}`, isDraft: false };
         }
         return null;
       })
       .filter(Boolean);
 
+    // Draft cards added from Find Programme
+    const draftCards = getDraftProgrammesForStage(stage).map((p) => ({
+      ...p,
+      isDraft: true,
+    }));
+
+    const allCards = [...existingCards, ...draftCards];
     const thresholds = STAGE_THRESHOLDS[stage] || { minimum: 2, ideal: 5 };
-    const currentCount = cards.length;
+    const totalCount = allCards.length;
 
     // Calculate how many placeholders needed for minimum and ideal
-    const belowMinimum = Math.max(0, thresholds.minimum - currentCount);
-    const betweenMinAndIdeal = Math.max(0, thresholds.ideal - Math.max(currentCount, thresholds.minimum));
+    const belowMinimum = Math.max(0, thresholds.minimum - totalCount);
+    const betweenMinAndIdeal = Math.max(0, thresholds.ideal - Math.max(totalCount, thresholds.minimum));
 
     return {
       stage,
-      cards,
+      existingCards,
+      draftCards,
+      allCards,
       minimum: thresholds.minimum,
       ideal: thresholds.ideal,
-      currentCount,
+      totalCount,
       belowMinimum,
       betweenMinAndIdeal,
     };
@@ -70,7 +83,7 @@ export default function ModellingGrid({
 
   // Find the maximum number of rows needed (cards + all placeholders + add button)
   const maxRows = Math.max(
-    ...columnData.map((col) => col.currentCount + col.belowMinimum + col.betweenMinAndIdeal + 1)
+    ...columnData.map((col) => col.totalCount + col.belowMinimum + col.betweenMinAndIdeal + 1)
   );
 
   const handlePlaceholderClick = (stage) => {
@@ -87,18 +100,18 @@ export default function ModellingGrid({
         }}
       >
         {/* Stage Headers with counts */}
-        {columnData.map(({ stage, currentCount, minimum, ideal }) => {
+        {columnData.map(({ stage, totalCount, minimum, ideal }) => {
           const defaultColor = STAGE_COLOR_MAP[stage] || '#6B7280';
 
           // Determine header color based on threshold status
           let headerColor = defaultColor;
           let statusClass = '';
 
-          if (currentCount < minimum) {
+          if (totalCount < minimum) {
             // Critical: below minimum threshold - RED
             headerColor = '#DC2626'; // red-600
             statusClass = 'ring-2 ring-red-300 ring-offset-1';
-          } else if (currentCount < ideal) {
+          } else if (totalCount < ideal) {
             // Warning: between minimum and ideal - AMBER
             headerColor = '#D97706'; // amber-600
           }
@@ -112,7 +125,7 @@ export default function ModellingGrid({
             >
               <span className="whitespace-nowrap">{stage}</span>
               <span className="opacity-90 text-[10px]">
-                {currentCount}/{ideal}
+                {totalCount}/{ideal}
               </span>
             </div>
           );
@@ -121,31 +134,44 @@ export default function ModellingGrid({
         {/* Grid rows - iterate by row index */}
         {Array.from({ length: maxRows }).map((_, rowIndex) =>
           columnData.map((col, colIndex) => {
-            const { stage, cards, belowMinimum, betweenMinAndIdeal, currentCount } = col;
+            const { stage, allCards, belowMinimum, betweenMinAndIdeal, totalCount } = col;
 
             // Determine what to show in this cell
-            if (rowIndex < cards.length) {
-              // Show actual card
-              const card = cards[rowIndex];
-              const isSelected = selectedProgrammes.has(card.id);
-              return (
-                <div key={`${rowIndex}-${colIndex}`}>
-                  <ModellingCard
-                    card={card}
-                    showValue={showValue}
-                    isSelected={isSelected}
-                    onSelect={() => onProgrammeSelect(card.id)}
-                  />
-                </div>
-              );
-            } else if (rowIndex < currentCount + belowMinimum + betweenMinAndIdeal) {
+            if (rowIndex < allCards.length) {
+              const card = allCards[rowIndex];
+
+              if (card.isDraft) {
+                // Show draft card (blue border, company/DAS display)
+                return (
+                  <div key={`${rowIndex}-${colIndex}`}>
+                    <DraftCard
+                      programme={card}
+                      onRemove={() => removeProgrammeFromStage(stage, card.id)}
+                    />
+                  </div>
+                );
+              } else {
+                // Show existing card
+                const isSelected = selectedProgrammes.has(card.id);
+                return (
+                  <div key={`${rowIndex}-${colIndex}`}>
+                    <ModellingCard
+                      card={card}
+                      showValue={showValue}
+                      isSelected={isSelected}
+                      onSelect={() => onProgrammeSelect(card.id)}
+                    />
+                  </div>
+                );
+              }
+            } else if (rowIndex < totalCount + belowMinimum + betweenMinAndIdeal) {
               // Show gap placeholder (red dashed) - navigates to find programme
               return (
                 <div key={`${rowIndex}-${colIndex}`}>
                   <GapPlaceholder onClick={() => handlePlaceholderClick(stage)} />
                 </div>
               );
-            } else if (rowIndex === currentCount + belowMinimum + betweenMinAndIdeal) {
+            } else if (rowIndex === totalCount + belowMinimum + betweenMinAndIdeal) {
               // Show "add more" button - also navigates to find programme
               return (
                 <div key={`${rowIndex}-${colIndex}`}>

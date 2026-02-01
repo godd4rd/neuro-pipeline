@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+import { useModelling } from '../context/ModellingContext';
 
 // Mock programme data for the search results
 const MOCK_PROGRAMMES = [
@@ -21,6 +22,7 @@ const MOCK_PROGRAMMES = [
 export default function FindProgramme() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { addProgrammesToStage } = useModelling();
   const stage = searchParams.get('stage') || '';
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -54,8 +56,14 @@ export default function FindProgramme() {
   };
 
   const handleAddToModel = () => {
-    // TODO: Add selected programmes to the model and navigate back
-    console.log('Add to model:', Array.from(selectedProgrammes));
+    // Get the full programme data for selected IDs
+    const programmesToAdd = MOCK_PROGRAMMES.filter((p) => selectedProgrammes.has(p.id));
+
+    // Add to the stage we came from
+    if (stage && programmesToAdd.length > 0) {
+      addProgrammesToStage(stage, programmesToAdd);
+    }
+
     navigate('/modelling');
   };
 
