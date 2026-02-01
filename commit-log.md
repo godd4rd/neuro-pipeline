@@ -12,3 +12,4 @@ A quick reference for finding and reverting changes.
 | `9bc250e` | Add Portfolio Modelling Wizard page with selectable cards and search panel |
 | `f43ff54` | Fix Portfolio Modelling to match Figma wireframe - colored stage headers, red dashed borders |
 | `f9f74b7` | Restructure grid to show ideal portfolio shape with gap placeholders |
+| `4774ae5` | Add minimum and ideal thresholds - red (critical), amber (optional), gray (add more) |
