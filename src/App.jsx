@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import NeurosciencePipeline from './pages/NeurosciencePipeline';
+import PortfolioModelling from './pages/PortfolioModelling';
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/neuroscience" element={<NeurosciencePipeline />} />
+        <Route path="/modelling" element={<PortfolioModelling />} />
       </Routes>
     </BrowserRouter>
   );

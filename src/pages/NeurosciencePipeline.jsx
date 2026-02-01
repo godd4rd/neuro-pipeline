@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import PipelineGrid from '../components/PipelineGrid';
 import ProgrammeDetailOverlay from '../components/ProgrammeDetailOverlay';
@@ -10,6 +10,7 @@ export default function NeurosciencePipeline() {
   const [year, setYear] = useState(2025);
   const [showValue, setShowValue] = useState(true);
   const [selectedProgramme, setSelectedProgramme] = useState(null);
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -45,8 +46,11 @@ export default function NeurosciencePipeline() {
         </div>
         <PlaygroundDropdown
           onSelect={(action) => {
-            console.log('Selected action:', action);
-            // TODO: Implement action handlers
+            if (action === 'modelling-wizard') {
+              navigate('/modelling');
+            } else {
+              console.log('Selected action:', action);
+            }
           }}
         />
       </section>
