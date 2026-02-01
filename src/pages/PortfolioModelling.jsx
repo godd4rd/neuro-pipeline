@@ -4,7 +4,6 @@ import Header from '../components/Header';
 import ModellingHeader from '../components/modelling/ModellingHeader';
 import ModellingControls from '../components/modelling/ModellingControls';
 import ModellingGrid from '../components/modelling/ModellingGrid';
-import ProgrammeSearch from '../components/modelling/ProgrammeSearch';
 import { neurosciencePipelineData, PIPELINE_STAGES } from '../data/neuroscienceData';
 
 export default function PortfolioModelling() {
@@ -12,14 +11,6 @@ export default function PortfolioModelling() {
   const [modelName, setModelName] = useState('Neuroscience pipeline 2025 draft 1');
   const [showValue, setShowValue] = useState(true);
   const [selectedProgrammes, setSelectedProgrammes] = useState(new Set());
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTA, setSelectedTA] = useState('Neuroscience');
-
-  // Flatten pipeline data to get all programmes for the search panel
-  const allProgrammes = neurosciencePipelineData
-    .flat()
-    .filter(Boolean)
-    .map((p, idx) => ({ ...p, id: p.id || `prog-${idx}` }));
 
   const handleProgrammeSelect = (programmeId) => {
     setSelectedProgrammes((prev) => {
@@ -99,42 +90,26 @@ export default function PortfolioModelling() {
         Back
       </Link>
 
-      <div className="flex">
-        {/* Main Content */}
-        <div className="flex-1">
-          <ModellingHeader
-            modelName={modelName}
-            onModelNameChange={setModelName}
-            onExport={handleExport}
-            onShare={handleShare}
-          />
+      <ModellingHeader
+        modelName={modelName}
+        onModelNameChange={setModelName}
+        onExport={handleExport}
+        onShare={handleShare}
+      />
 
-          <ModellingControls
-            showValue={showValue}
-            onShowValueChange={setShowValue}
-            pipelineValue="$67.7m"
-          />
+      <ModellingControls
+        showValue={showValue}
+        onShowValueChange={setShowValue}
+        pipelineValue="$67.7m"
+      />
 
-          <ModellingGrid
-            data={neurosciencePipelineData}
-            stages={PIPELINE_STAGES}
-            showValue={showValue}
-            selectedProgrammes={selectedProgrammes}
-            onProgrammeSelect={handleProgrammeSelect}
-          />
-        </div>
-
-        {/* Right Sidebar */}
-        <ProgrammeSearch
-          programmes={allProgrammes}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          selectedTA={selectedTA}
-          onTAChange={setSelectedTA}
-          selectedProgrammes={selectedProgrammes}
-          onProgrammeSelect={handleProgrammeSelect}
-        />
-      </div>
+      <ModellingGrid
+        data={neurosciencePipelineData}
+        stages={PIPELINE_STAGES}
+        showValue={showValue}
+        selectedProgrammes={selectedProgrammes}
+        onProgrammeSelect={handleProgrammeSelect}
+      />
     </div>
   );
 }
