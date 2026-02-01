@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 
 // Mock programme data for the search results
@@ -20,6 +20,7 @@ const MOCK_PROGRAMMES = [
 
 export default function FindProgramme() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const stage = searchParams.get('stage') || '';
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -29,6 +30,8 @@ export default function FindProgramme() {
   const [selectedPhase, setSelectedPhase] = useState(stage || 'LO');
   const [selectedProgrammes, setSelectedProgrammes] = useState(new Set());
   const [currentPage, setCurrentPage] = useState(1);
+
+  const selectionCount = selectedProgrammes.size;
 
   const toggleProgramme = (id) => {
     setSelectedProgrammes((prev) => {
@@ -44,6 +47,20 @@ export default function FindProgramme() {
 
   const handleSearch = () => {
     console.log('Search:', { searchQuery, selectedTA, selectedIndication, selectedModality, selectedPhase });
+  };
+
+  const handleCompare = () => {
+    console.log('Compare programmes:', Array.from(selectedProgrammes));
+  };
+
+  const handleAddToModel = () => {
+    // TODO: Add selected programmes to the model and navigate back
+    console.log('Add to model:', Array.from(selectedProgrammes));
+    navigate('/modelling');
+  };
+
+  const handleResetSelection = () => {
+    setSelectedProgrammes(new Set());
   };
 
   return (
@@ -258,6 +275,30 @@ export default function FindProgramme() {
           </button>
         </div>
       </section>
+
+      {/* Floating Action Panel - appears when items are selected */}
+      {selectionCount > 0 && (
+        <div className="fixed right-6 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-50">
+          <button
+            onClick={handleCompare}
+            className="px-4 py-2 bg-[#7F1D1D] text-white text-sm font-medium rounded-full hover:bg-[#991B1B] transition-colors shadow-lg"
+          >
+            Compare ({selectionCount})
+          </button>
+          <button
+            onClick={handleAddToModel}
+            className="px-4 py-2 bg-[#D21034] text-white text-sm font-medium rounded-full hover:bg-[#B80D2C] transition-colors shadow-lg"
+          >
+            Add to model ({selectionCount})
+          </button>
+          <button
+            onClick={handleResetSelection}
+            className="px-4 py-2 bg-white text-[#D21034] text-sm font-medium rounded-full border border-[#D21034] hover:bg-red-50 transition-colors shadow-lg"
+          >
+            Reset selection
+          </button>
+        </div>
+      )}
     </div>
   );
 }
