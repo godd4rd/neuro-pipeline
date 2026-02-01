@@ -10,3 +10,4 @@ A quick reference for finding and reverting changes.
 | `6c5de31` | Add programme detail overlay - clickable cards show modal with drug details |
 | `50c065d` | Add Pipeline playground dropdown menu with three action options |
 | `9bc250e` | Add Portfolio Modelling Wizard page with selectable cards and search panel |
+| `f43ff54` | Fix Portfolio Modelling to match Figma wireframe - colored stage headers, red dashed borders |
