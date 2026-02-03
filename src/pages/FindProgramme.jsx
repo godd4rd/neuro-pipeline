@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import { useModelling } from '../context/ModellingContext';
+import CompareOverlay from '../components/CompareOverlay';
 
 // Mock programme data for the search results
 const MOCK_PROGRAMMES = [
@@ -32,6 +33,7 @@ export default function FindProgramme() {
   const [selectedPhase, setSelectedPhase] = useState(stage || 'LO');
   const [selectedProgrammes, setSelectedProgrammes] = useState(new Set());
   const [currentPage, setCurrentPage] = useState(1);
+  const [showCompareOverlay, setShowCompareOverlay] = useState(false);
 
   const selectionCount = selectedProgrammes.size;
 
@@ -52,7 +54,7 @@ export default function FindProgramme() {
   };
 
   const handleCompare = () => {
-    console.log('Compare programmes:', Array.from(selectedProgrammes));
+    setShowCompareOverlay(true);
   };
 
   const handleAddToModel = () => {
@@ -306,6 +308,15 @@ export default function FindProgramme() {
             Reset selection
           </button>
         </div>
+      )}
+
+      {/* Compare Overlay */}
+      {showCompareOverlay && (
+        <CompareOverlay
+          programmes={MOCK_PROGRAMMES.filter((p) => selectedProgrammes.has(p.id))}
+          onClose={() => setShowCompareOverlay(false)}
+          stage={stage}
+        />
       )}
     </div>
   );

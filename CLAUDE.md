@@ -159,6 +159,32 @@ src/
 - Use descriptive commit messages
 - Include `Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>` in commits
 
+## Deployment (REQUIRED)
+
+**IMPORTANT: After completing any code changes, ALWAYS perform these steps:**
+
+1. **Commit changes to git:**
+   ```bash
+   git add <changed-files>
+   git commit -m "Description of changes
+
+   Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+   ```
+
+2. **Push to GitHub:**
+   ```bash
+   git push origin main
+   ```
+
+Deployment happens automatically via GitHub Actions when you push to main. The workflow:
+- Builds the project
+- Deploys to GitHub Pages
+- Runs a smoke test to verify the deployment
+
+**Live Site:** https://godd4rd.github.io/neuro-pipeline/
+
+These steps must be completed for every change to ensure the live site is updated.
+
 ## Figma Reference
 - Design file: SilverLine
 - Node: 4907-75854 (Dashboard view)
