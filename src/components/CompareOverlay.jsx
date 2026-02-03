@@ -120,6 +120,15 @@ export default function CompareOverlay({ programmes, onClose, stage }) {
     return 'N/A';
   };
 
+  // Calculate column width - equal distribution for 5 or fewer, fixed width for more
+  const programmeCount = programmes.length;
+  const shouldScroll = programmeCount > 5;
+  const parameterColumnWidth = 180; // Fixed width for parameter column
+  // For 5 or fewer: divide remaining space equally
+  // For more than 5: use fixed minimum width per column
+  const columnWidth = shouldScroll ? 280 : undefined;
+  const columnWidthPercent = shouldScroll ? undefined : `${100 / programmeCount}%`;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
@@ -142,15 +151,37 @@ export default function CompareOverlay({ programmes, onClose, stage }) {
         </div>
 
         {/* Comparison Table */}
-        <div className="overflow-x-auto overflow-y-auto max-h-[calc(90vh-140px)]">
-          <table className="w-full">
+        <div className={`overflow-y-auto max-h-[calc(90vh-140px)] ${shouldScroll ? 'overflow-x-auto' : 'overflow-x-hidden'}`}>
+          <table className="w-full" style={{ tableLayout: shouldScroll ? 'auto' : 'fixed' }}>
+            <colgroup>
+              <col style={{ width: parameterColumnWidth }} />
+              {programmes.map((prog) => (
+                <col
+                  key={prog.id}
+                  style={{
+                    width: shouldScroll ? columnWidth : columnWidthPercent,
+                    minWidth: shouldScroll ? columnWidth : undefined
+                  }}
+                />
+              ))}
+            </colgroup>
             <thead>
               <tr className="border-b border-gray-200">
-                <th className="px-4 py-4 text-left text-sm font-semibold text-gray-700 bg-gray-50 min-w-[160px] sticky left-0">
+                <th
+                  className="px-4 py-4 text-left text-sm font-semibold text-gray-700 bg-gray-50 sticky left-0 z-10"
+                  style={{ width: parameterColumnWidth, minWidth: parameterColumnWidth }}
+                >
                   Parameter
                 </th>
                 {programmes.map((prog) => (
-                  <th key={prog.id} className="px-4 py-4 text-left min-w-[280px]">
+                  <th
+                    key={prog.id}
+                    className="px-4 py-4 text-left"
+                    style={{
+                      width: shouldScroll ? columnWidth : columnWidthPercent,
+                      minWidth: shouldScroll ? columnWidth : undefined
+                    }}
+                  >
                     <div className="space-y-2">
                       <span className="text-sm font-semibold text-gray-900 underline">
                         {prog.id}
@@ -174,11 +205,17 @@ export default function CompareOverlay({ programmes, onClose, stage }) {
             <tbody>
               {PARAMETERS.map((param, idx) => (
                 <tr key={param.key} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                  <td className={`px-4 py-3 text-sm font-semibold text-gray-700 border-b border-gray-100 sticky left-0 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                  <td
+                    className={`px-4 py-3 text-sm font-semibold text-gray-700 border-b border-gray-100 sticky left-0 z-10 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}
+                    style={{ width: parameterColumnWidth, minWidth: parameterColumnWidth }}
+                  >
                     {param.label}
                   </td>
                   {programmes.map((prog) => (
-                    <td key={prog.id} className="px-4 py-3 text-sm text-gray-600 border-b border-gray-100">
+                    <td
+                      key={prog.id}
+                      className="px-4 py-3 text-sm text-gray-600 border-b border-gray-100"
+                    >
                       {getValue(prog, param.key)}
                     </td>
                   ))}
