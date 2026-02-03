@@ -213,9 +213,6 @@ export default function FindProgramme() {
           <table className="w-full">
             <thead>
               <tr className="bg-gray-900 text-white text-xs">
-                <th className="px-4 py-3 text-left font-medium">
-                  <input type="checkbox" className="rounded" />
-                </th>
                 <th className="px-4 py-3 text-left font-medium">Project name</th>
                 <th className="px-4 py-3 text-left font-medium">Project code name</th>
                 <th className="px-4 py-3 text-left font-medium">Company name</th>
@@ -229,17 +226,9 @@ export default function FindProgramme() {
               {MOCK_PROGRAMMES.map((prog) => (
                 <tr
                   key={prog.id}
-                  className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
+                  className={`border-b border-gray-100 hover:bg-gray-50 cursor-pointer ${selectedProgrammes.has(prog.id) ? 'bg-red-50' : ''}`}
                   onClick={() => toggleProgramme(prog.id)}
                 >
-                  <td className="px-4 py-4">
-                    <input
-                      type="checkbox"
-                      checked={selectedProgrammes.has(prog.id)}
-                      onChange={() => toggleProgramme(prog.id)}
-                      className="rounded"
-                    />
-                  </td>
                   <td className="px-4 py-4 text-sm text-gray-900">{prog.id}</td>
                   <td className="px-4 py-4 text-sm text-gray-600">{prog.code}</td>
                   <td className="px-4 py-4 text-sm text-gray-600">{prog.company}</td>
